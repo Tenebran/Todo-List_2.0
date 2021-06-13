@@ -1,0 +1,19 @@
+.todolist {
+  &__done {
+    opacity: 0.5;
+  }
+}
+
+.error {
+  border: 1px solid red;
+
+  &__messages {
+    color: red;
+  }
+}
+
+.button {
+  &__filter {
+    background-color: saddlebrown;
+  }
+}
