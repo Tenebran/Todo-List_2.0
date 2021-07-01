@@ -2,7 +2,8 @@ import React, { useState, ChangeEvent } from 'react';
 
 type EditTableSpanPropsType = {
   title: string;
-  nameClass: string;
+  nameClass?: string;
+  onChange: (newValue: string) => void;
 };
 
 export default function EditTableStan(props: EditTableSpanPropsType) {
@@ -16,6 +17,7 @@ export default function EditTableStan(props: EditTableSpanPropsType) {
 
   const activeModeOff = () => {
     setEditMode(false);
+    props.onChange(title);
   };
 
   const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Todolist, { TasksType } from './modules/components/Todolist/Todolist';
-import './App.css';
+import './App.scss';
 import { v1 } from 'uuid';
 import AddItemForm from './modules/components/AddItemForm/AddItemForm';
 
@@ -61,6 +61,13 @@ function App() {
     delete tasks1[todolistId];
     setTasks1({ ...tasks1 });
   }
+  function changeTodolistTitle(id: string, title: string) {
+    const todolistFind = todolist.find(list => list.id === id);
+    if (todolistFind) {
+      todolistFind.title = title;
+      setTodolist([...todolist]);
+    }
+  }
 
   function removeTask(id: string, todolistId: string) {
     let tasks = tasks1[todolistId];
@@ -82,6 +89,15 @@ function App() {
     let task = tasks.find(list => list.id === id);
     if (task) {
       task.isDone = isDone;
+      setTasks1({ ...tasks1 });
+    }
+  }
+
+  function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
+    let tasks = tasks1[todolistId];
+    let task = tasks.find(list => list.id === id);
+    if (task) {
+      task.title = newTitle;
       setTasks1({ ...tasks1 });
     }
   }
@@ -110,6 +126,8 @@ function App() {
             filterTask={list.filter}
             id={list.id}
             removeTodolist={removeTodolist}
+            changeTaskTitle={changeTaskTitle}
+            changeTodolistTitle={changeTodolistTitle}
           />
         );
       })}
