@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
+import TextField from '@material-ui/core/TextField';
 
 type EditTableSpanPropsType = {
   title: string;
@@ -25,7 +26,16 @@ export default function EditTableStan(props: EditTableSpanPropsType) {
   };
 
   return editMode ? (
-    <input onBlur={activeModeOff} value={title} autoFocus onChange={onChangeTitleHandler}></input>
+    <TextField
+      id="standard-basic"
+      defaultValue="Hello world"
+      inputProps={{ 'aria-label': 'description' }}
+      onBlur={activeModeOff}
+      value={title}
+      autoFocus
+      onChange={onChangeTitleHandler}
+      size="small"
+    />
   ) : (
     <span onDoubleClick={activeModeOn} className={props.nameClass}>
       {props.title}

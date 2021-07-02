@@ -1,5 +1,6 @@
 import React from 'react';
 import './Button.scss';
+import Button from '@material-ui/core/Button';
 
 type ButtonPropsType = {
   title: string;
@@ -7,10 +8,16 @@ type ButtonPropsType = {
   nameClass: string;
 };
 
-export default function Button(props: ButtonPropsType) {
+export default function ButtonFilter(props: ButtonPropsType) {
+  console.log(props.nameClass);
   return (
-    <button className={props.nameClass} onClick={props.callBack}>
+    <Button
+      color={props.nameClass ? 'primary' : 'default'}
+      variant="contained"
+      className={props.nameClass}
+      onClick={props.callBack}
+    >
       {props.title}
-    </button>
+    </Button>
   );
 }
