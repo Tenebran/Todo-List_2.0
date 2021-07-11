@@ -14,7 +14,7 @@ import Paper from '@material-ui/core/Paper';
 
 export type KeyType = 'all' | 'complited' | 'active';
 
-type TodolistType = {
+export type TodolistType = {
   id: string;
   title: string;
   filter: KeyType;
@@ -112,13 +112,15 @@ function App() {
 
   return (
     <div className="App">
-      <AppBar position="fixed" className="header">
-        <Toolbar>
+      <AppBar position="fixed">
+        <Toolbar className="header">
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="h6">News</Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" variant={'outlined'}>
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <Container fixed>
