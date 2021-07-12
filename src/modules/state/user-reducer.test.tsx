@@ -1,7 +1,7 @@
 import { userReducer } from './user-reducer';
 
 test('user reducer should increment only age', () => {
-  const startState = { age: 20, childrenCount: 2, name: 'Sergej' };
+  const startState = { age: 20, childrenCount: 2, name: 'Sergeji' };
 
   const endState = userReducer(startState, { type: 'INCREMENT-AGE' });
 

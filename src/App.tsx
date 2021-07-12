@@ -20,7 +20,7 @@ export type TodolistType = {
   filter: KeyType;
 };
 
-type TasksStateType = {
+export type TasksStateType = {
   [key: string]: Array<TasksType>;
 };
 
