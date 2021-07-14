@@ -1,7 +1,7 @@
 import { v1 } from 'uuid';
 import { TodolistType, KeyType } from '../../App';
 
-type RemoveTodolistType = {
+export type RemoveTodolistType = {
   type: 'REMOVE-TODOLIST';
   id: string;
 };

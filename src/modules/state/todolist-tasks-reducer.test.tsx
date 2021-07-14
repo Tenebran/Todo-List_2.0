@@ -10,7 +10,7 @@ test('new property with array should be added when new todolis is added', () => 
   const endTasksState = tasksReducer(startTaskState, action);
   const endTodolistState = todolistReducer(startTodolistsState, action);
 
-  const keys = Object.keys(startTaskState);
+  const keys = Object.keys(endTasksState);
   const idFormTasks = keys[0];
   const idFormTodolists = endTodolistState[0].id;
 
