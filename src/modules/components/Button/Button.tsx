@@ -9,7 +9,6 @@ type ButtonPropsType = {
 };
 
 export default function ButtonFilter(props: ButtonPropsType) {
-  console.log(props.nameClass);
   return (
     <Button
       color={props.nameClass ? 'primary' : 'default'}

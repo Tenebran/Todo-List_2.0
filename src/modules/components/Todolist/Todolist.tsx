@@ -58,8 +58,9 @@ export default function Todolist(props: PropsType) {
       <AddItemForm addItem={addTask} />
       <ul className="todolist__list__wrapper">
         {props.tasks.map(list => {
-          const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) =>
+          const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
             props.changeStatus(list.id, e.currentTarget.checked, props.id);
+          };
           const changeTitleHandler = (newValue: string) => {
             props.changeTaskTitle(list.id, newValue, props.id);
           };
