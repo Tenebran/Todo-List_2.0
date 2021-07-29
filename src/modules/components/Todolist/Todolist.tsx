@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { KeyType } from '../../../App';
+import { KeyType, TasksStateType } from '../../../App';
 import './Todolist.scss';
 import AddItemForm from '../AddItemForm/AddItemForm';
 import ButtonFilter from '../Button/Button';
@@ -9,6 +9,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import Favorite from '@material-ui/icons/Favorite';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppRootState } from '../../state/store/store';
+import {
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+} from '../../state/task-reducer';
 
 export type TasksType = {
   id: string;
@@ -18,12 +26,12 @@ export type TasksType = {
 
 type PropsType = {
   title: string;
-  tasks: Array<TasksType>;
-  removeTask: (id: string, todoId: string) => void;
+  // tasks: Array<TasksType>;
+  // removeTask: (id: string, todoId: string) => void;
   changeFilter: (changeValue: KeyType, filterId: string) => void;
-  addTask: (newValue: string, todoId: string) => void;
-  changeStatus: (id: string, isDone: boolean, todoId: string) => void;
-  changeTaskTitle: (id: string, newTitle: string, todoId: string) => void;
+  // addTask: (newValue: string, todoId: string) => void;
+  // changeStatus: (id: string, isDone: boolean, todoId: string) => void;
+  // changeTaskTitle: (id: string, newTitle: string, todoId: string) => void;
   filterTask: KeyType;
   id: string;
   removeTodolist: (id: string) => void;
@@ -31,6 +39,9 @@ type PropsType = {
 };
 
 export default function Todolist(props: PropsType) {
+  const dispatch = useDispatch();
+  const tasks = useSelector<AppRootState, Array<TasksType>>(state => state.task[props.id]);
+
   const changeAllFilter = () => props.changeFilter('all', props.id);
   const changeActiveFilter = () => props.changeFilter('active', props.id);
   const changeCompletedFilter = () => props.changeFilter('complited', props.id);
@@ -44,8 +55,16 @@ export default function Todolist(props: PropsType) {
   };
 
   const addTask = (title: string) => {
-    props.addTask(title, props.id);
+    dispatch(addTaskAC(title, props.id));
   };
+
+  let taskTodolist = tasks;
+  if (props.filterTask === 'active') {
+    taskTodolist = tasks.filter(list => !list.isDone);
+  }
+  if (props.filterTask === 'complited') {
+    taskTodolist = tasks.filter(list => list.isDone);
+  }
 
   return (
     <div>
@@ -57,19 +76,21 @@ export default function Todolist(props: PropsType) {
       </h3>
       <AddItemForm addItem={addTask} />
       <ul className="todolist__list__wrapper">
-        {props.tasks.map(list => {
+        {tasks.map(list => {
+          const onClickHandlerRemove = () => dispatch(removeTaskAC(list.id, props.id));
           const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            props.changeStatus(list.id, e.currentTarget.checked, props.id);
+            let newIsDoneValue = e.currentTarget.checked;
+            dispatch(changeTaskStatusAC(list.id, newIsDoneValue, props.id));
           };
           const changeTitleHandler = (newValue: string) => {
-            props.changeTaskTitle(list.id, newValue, props.id);
+            dispatch(changeTaskTitleAC(list.id, newValue, list.id));
           };
           return (
             <li key={list.id} className="todolist__list">
               <Checkbox
                 icon={<FavoriteBorder />}
                 checkedIcon={<Favorite />}
-                name="checkedH"
+                name="checked"
                 checked={list.isDone}
                 onChange={e => changeStatusHandler(e)}
               />
@@ -79,7 +100,7 @@ export default function Todolist(props: PropsType) {
                 nameClass={list.isDone ? 'todolist__done' : ''}
                 onChange={changeTitleHandler}
               />
-              <IconButton aria-label="delete" onClick={e => props.removeTask(list.id, props.id)}>
+              <IconButton aria-label="delete" onClick={e => onClickHandlerRemove()}>
                 <DeleteIcon />
               </IconButton>
             </li>

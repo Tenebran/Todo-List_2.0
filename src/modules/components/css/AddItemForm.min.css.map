@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,MAAM,AAAC,CACL,MAAM,CAAE,aAAa,CAKtB,AAHE,AAAD,gBAAW,AAAC,CACV,KAAK,CAAE,GAAG,CACX",
-    "sources": [
-        "../AddItemForm/AddItemForm.scss"
-    ],
-    "names": [],
-    "file": "AddItemForm.min.css"
-}

@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AACG,AAAD,eAAS,AAAC,CACR,gBAAgB,CAAE,WAAW,CAC9B",
-    "sources": [
-        "../Button/Button.scss"
-    ],
-    "names": [],
-    "file": "Button.min.css"
-}
