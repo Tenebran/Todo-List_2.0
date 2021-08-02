@@ -16,5 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "../../corb#/AppWithReducer.tsx", "../../corb#/AppWithRedux.tsx"]
+  "include": [
+    "src",
+    "../../corb#/AppWithReducer.tsx",
+    "../../corb#/AppWithRedux.tsx",
+    "../../social_network_2.0/social_network/src/redux/auth-reducer.ts"
+  ]
 }

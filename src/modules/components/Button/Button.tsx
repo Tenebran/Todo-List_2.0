@@ -8,7 +8,7 @@ type ButtonPropsType = {
   nameClass: string;
 };
 
-export default function ButtonFilter(props: ButtonPropsType) {
+const ButtonFilter = React.memo((props: ButtonPropsType) => {
   return (
     <Button
       color={props.nameClass ? 'primary' : 'default'}
@@ -19,4 +19,5 @@ export default function ButtonFilter(props: ButtonPropsType) {
       {props.title}
     </Button>
   );
-}
+});
+export default ButtonFilter;

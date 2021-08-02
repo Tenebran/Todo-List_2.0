@@ -7,7 +7,7 @@ type EditTableSpanPropsType = {
   onChange: (newValue: string) => void;
 };
 
-export default function EditTableStan(props: EditTableSpanPropsType) {
+const EditTableStan = React.memo((props: EditTableSpanPropsType) => {
   let [editMode, setEditMode] = useState(false);
   let [title, setTitle] = useState('');
 
@@ -28,7 +28,6 @@ export default function EditTableStan(props: EditTableSpanPropsType) {
   return editMode ? (
     <TextField
       id="standard-basic"
-      defaultValue="Hello world"
       inputProps={{ 'aria-label': 'description' }}
       onBlur={activeModeOff}
       value={title}
@@ -41,4 +40,6 @@ export default function EditTableStan(props: EditTableSpanPropsType) {
       {props.title}
     </span>
   );
-}
+});
+
+export default EditTableStan;

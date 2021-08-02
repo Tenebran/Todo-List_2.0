@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Todolist, { TasksType } from './modules/components/Todolist/Todolist';
 import './App.scss';
 import AddItemForm from './modules/components/AddItemForm/AddItemForm';
@@ -10,12 +10,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import { Grid } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import {
-  addTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskAC,
-} from './modules/state/task-reducer';
 import {
   AddTodolistAc,
   changeTodolistFilterAC,
@@ -37,49 +31,41 @@ export type TasksStateType = {
   [key: string]: Array<TasksType>;
 };
 
-function App() {
+const App = React.memo(() => {
   const dispatch = useDispatch();
   const todolist = useSelector<AppRootState, Array<TodolistType>>(state => state.todolist);
-  // const tasks = useSelector<AppRootState, TasksStateType>(state => state.task);
 
-  function addItem(title: string) {
-    const action = AddTodolistAc(title);
-    dispatch(action);
-  }
+  const addItem = useCallback(
+    (title: string) => {
+      const action = AddTodolistAc(title);
+      dispatch(action);
+    },
+    [dispatch]
+  );
 
-  function changeFilter(changeValue: KeyType, todolistId: string) {
-    const action = changeTodolistFilterAC(changeValue, todolistId);
-    dispatch(action);
-  }
+  const changeFilter = useCallback(
+    (changeValue: KeyType, todolistId: string) => {
+      const action = changeTodolistFilterAC(changeValue, todolistId);
+      dispatch(action);
+    },
+    [dispatch]
+  );
 
-  function removeTodolist(todolistId: string) {
-    const action = RemoveTodolistAC(todolistId);
-    dispatch(action);
-  }
-  function changeTodolistTitle(id: string, title: string) {
-    const action = changeTodolistTitleAC(id, title);
-    dispatch(action);
-  }
+  const removeTodolist = useCallback(
+    (todolistId: string) => {
+      const action = RemoveTodolistAC(todolistId);
+      dispatch(action);
+    },
+    [dispatch]
+  );
 
-  // function removeTask(id: string, todolistId: string) {
-  //   const action = removeTaskAC(id, todolistId);
-  //   dispatch(action);
-  // }
-
-  // function addTask(newValue: string, todolistId: string) {
-  //   const action = addTaskAC(newValue, todolistId);
-  //   dispatch(action);
-  // }
-
-  // function changeStatus(id: string, isDone: boolean, todolistId: string) {
-  //   const action = changeTaskStatusAC(id, isDone, todolistId);
-  //   dispatch(action);
-  // }
-
-  // function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
-  //   const action = changeTaskTitleAC(id, newTitle, todolistId);
-  //   dispatch(action);
-  // }
+  const changeTodolistTitle = useCallback(
+    (id: string, title: string) => {
+      const action = changeTodolistTitleAC(id, title);
+      dispatch(action);
+    },
+    [dispatch]
+  );
 
   return (
     <div className="App">
@@ -106,15 +92,10 @@ function App() {
                 <Paper elevation={3} className="paper__style">
                   <Todolist
                     title={list.title}
-                    // tasks={taskTodolist}
-                    // removeTask={removeTask}
                     changeFilter={changeFilter}
-                    // addTask={addTask}
-                    // changeStatus={changeStatus}
                     filterTask={list.filter}
                     id={list.id}
                     removeTodolist={removeTodolist}
-                    // changeTaskTitle={changeTaskTitle}
                     changeTodolistTitle={changeTodolistTitle}
                   />
                 </Paper>
@@ -125,6 +106,6 @@ function App() {
       </Container>
     </div>
   );
-}
+});
 
 export default App;
