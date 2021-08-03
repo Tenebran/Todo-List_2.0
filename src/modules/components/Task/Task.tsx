@@ -2,34 +2,34 @@ import { Favorite, FavoriteBorder } from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import './Task.scss';
-import {
-  addTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskAC,
-} from '../../state/task-reducer';
 import { useDispatch } from 'react-redux';
-import EditTableSpan from '../EditTableSpan/EditTableStan';
+import EditTableSpan from '../EditTableSpan/EditTableSpan';
+import { TasksType } from '../Todolist/Todolist';
 
 type TaskProps = {
   id: string;
-  listIsDone: boolean;
-  listId: string;
-  title: string;
+  task: TasksType;
+  addTaskAC: (newTodolistTitle: string, id: string) => void;
+  changeTaskStatusAC: (taskId: string, IsDone: boolean, todolistId: string) => void;
+  changeTaskTitleAC: (taskId: string, title: string, todolistId: string) => void;
+  removeTaskAC: (taskId: string, todolistId: string) => void;
 };
 
-const Task = (props: TaskProps) => {
+const Task = React.memo((props: TaskProps) => {
   const dispatch = useDispatch();
-  const onClickHandlerRemove = () => dispatch(removeTaskAC(props.listId, props.id));
+  const onClickHandlerRemove = () => dispatch(props.removeTaskAC(props.task.id, props.id));
   const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked;
-    dispatch(changeTaskStatusAC(props.listId, newIsDoneValue, props.id));
+    dispatch(props.changeTaskStatusAC(props.task.id, newIsDoneValue, props.id));
   };
-  const changeTitleHandler = (newValue: string) => {
-    dispatch(changeTaskTitleAC(props.id, newValue, props.id));
-  };
+  const changeTitleHandler = useCallback(
+    (newValue: string) => {
+      dispatch(props.changeTaskTitleAC(props.task.id, newValue, props.id));
+    },
+    [props, dispatch]
+  );
 
   return (
     <li className="todolist__list">
@@ -37,13 +37,13 @@ const Task = (props: TaskProps) => {
         icon={<FavoriteBorder />}
         checkedIcon={<Favorite />}
         name="checked"
-        checked={props.listIsDone}
+        checked={props.task.isDone}
         onChange={e => changeStatusHandler(e)}
       />
 
       <EditTableSpan
-        title={props.title}
-        nameClass={props.listIsDone ? 'todolist__done' : ''}
+        title={props.task.title}
+        nameClass={props.task.isDone ? 'todolist__done' : ''}
         onChange={changeTitleHandler}
       />
       <IconButton aria-label="delete" onClick={e => onClickHandlerRemove()}>
@@ -51,6 +51,6 @@ const Task = (props: TaskProps) => {
       </IconButton>
     </li>
   );
-};
+});
 
 export default Task;

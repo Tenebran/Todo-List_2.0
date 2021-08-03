@@ -16,6 +16,12 @@ import {
   changeTodolistTitleAC,
   RemoveTodolistAC,
 } from './modules/state/todolists-reducer';
+import {
+  addTaskAC,
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+} from './modules/state/task-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootState } from './modules/state/store/store';
 
@@ -97,6 +103,10 @@ const App = React.memo(() => {
                     id={list.id}
                     removeTodolist={removeTodolist}
                     changeTodolistTitle={changeTodolistTitle}
+                    addTaskAC={addTaskAC}
+                    changeTaskStatusAC={changeTaskStatusAC}
+                    changeTaskTitleAC={changeTaskTitleAC}
+                    removeTaskAC={removeTaskAC}
                   />
                 </Paper>
               </Grid>

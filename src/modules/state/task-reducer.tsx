@@ -58,25 +58,18 @@ export const tasksReducer = (
 
     case CHANGE_TASK_STATUS: {
       let todolistTask = state[action.todolistId];
-      let tasks = todolistTask.find(list => list.id === action.taskId);
-
-      if (tasks) {
-        tasks.isDone = action.IsDone;
-      }
-      state[action.todolistId] = [...todolistTask];
+      state[action.todolistId] = todolistTask.map(list =>
+        list.id === action.taskId ? { ...list, isDone: action.IsDone } : list
+      );
 
       return { ...state };
     }
 
     case CHANGE_TASK_TITLE: {
       let todolistTask = state[action.todolistId];
-      let tasks = todolistTask.find(list => list.id === action.taskId);
-
-      if (tasks) {
-        tasks.title = action.title;
-      }
-      state[action.todolistId] = [...todolistTask];
-
+      state[action.todolistId] = todolistTask.map(list =>
+        list.id === action.taskId ? { ...list, title: action.title } : list
+      );
       return { ...state };
     }
 
