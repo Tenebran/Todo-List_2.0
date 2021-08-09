@@ -7,7 +7,7 @@ type EditTableSpanPropsType = {
   onChange: (newValue: string) => void;
 };
 
-const EditTableStan = React.memo((props: EditTableSpanPropsType) => {
+const EditTableSpan = React.memo((props: EditTableSpanPropsType) => {
   let [editMode, setEditMode] = useState(false);
   let [title, setTitle] = useState('');
 
@@ -42,4 +42,4 @@ const EditTableStan = React.memo((props: EditTableSpanPropsType) => {
   );
 });
 
-export default EditTableStan;
+export default EditTableSpan;

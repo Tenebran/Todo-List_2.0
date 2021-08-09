@@ -86,7 +86,7 @@ const App = React.memo(() => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Container fixed>
+      <Container fixed className="todoList__form">
         <Grid container justify="center">
           <AddItemForm addItem={addItem} />
         </Grid>
