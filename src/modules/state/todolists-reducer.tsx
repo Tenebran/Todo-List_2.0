@@ -14,10 +14,7 @@ export type ActionsTypes =
 
 export let todolist1 = v1();
 export let todolist2 = v1();
-const initialState: Array<TodolistType> = [
-  { id: todolist1, title: 'What To Learn', filter: 'all' },
-  { id: todolist2, title: 'Movies', filter: 'all' },
-];
+const initialState: Array<TodolistType> = [];
 
 export const todolistReducer = (
   state: Array<TodolistType> = initialState,

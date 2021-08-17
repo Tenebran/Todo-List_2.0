@@ -5,8 +5,6 @@ import {
   RemoveTodolistAC,
   REMOVE_TODOLIST,
   ADD_TODOLIST,
-  todolist1,
-  todolist2,
 } from './todolists-reducer';
 
 const REMOVE_TASK = 'REMOVE-TASK';
@@ -22,21 +20,7 @@ type ActionsTypes =
   | ReturnType<typeof AddTodolistAc>
   | ReturnType<typeof RemoveTodolistAC>;
 
-const initialState: TasksStateType = {
-  [todolist1]: [
-    { id: v1(), title: 'CSS', isDone: true },
-    { id: v1(), title: 'JS', isDone: true },
-    { id: v1(), title: 'React', isDone: false },
-    { id: v1(), title: 'Redux', isDone: false },
-  ],
-
-  [todolist2]: [
-    { id: v1(), title: 'Terminator', isDone: true },
-    { id: v1(), title: 'Marvel', isDone: true },
-    { id: v1(), title: 'Iron Man', isDone: false },
-    { id: v1(), title: 'Spider Man', isDone: false },
-  ],
-};
+const initialState: TasksStateType = {};
 export const tasksReducer = (
   state: TasksStateType = initialState,
   action: ActionsTypes
