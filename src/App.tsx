@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import Todolist, { TasksType } from './modules/components/Todolist/Todolist';
+import Todolist from './modules/components/Todolist/Todolist';
 import './App.scss';
 import AddItemForm from './modules/components/AddItemForm/AddItemForm';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,6 +15,8 @@ import {
   changeTodolistFilterAC,
   changeTodolistTitleAC,
   RemoveTodolistAC,
+  KeyType,
+  TodolistDomainType,
 } from './modules/state/todolists-reducer';
 import {
   addTaskAC,
@@ -24,22 +26,15 @@ import {
 } from './modules/state/task-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootState } from './modules/state/store/store';
-
-export type KeyType = 'all' | 'complited' | 'active';
-
-export type TodolistType = {
-  id: string;
-  title: string;
-  filter: KeyType;
-};
+import { TaskType, TodoListType } from './api/todolists-api';
 
 export type TasksStateType = {
-  [key: string]: Array<TasksType>;
+  [key: string]: Array<TaskType>;
 };
 
 const App = React.memo(() => {
   const dispatch = useDispatch();
-  const todolist = useSelector<AppRootState, Array<TodolistType>>(state => state.todolist);
+  const todolist = useSelector<AppRootState, Array<TodolistDomainType>>(state => state.todolist);
 
   const addItem = useCallback(
     (title: string) => {

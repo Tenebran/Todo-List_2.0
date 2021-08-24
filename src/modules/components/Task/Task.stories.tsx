@@ -5,6 +5,8 @@ import Task from './Task';
 import { Provider } from 'react-redux';
 import { store } from '../../state/store/store';
 import { ReduxStoreProviderDecorator } from '../../../stories/ReduxStoreProviderDecorator';
+import { TaskPrioties, TaskStatuses } from '../../../api/todolists-api';
+import { v1 } from 'uuid';
 
 export default {
   title: 'Task Component',
@@ -21,7 +23,19 @@ export const TaskBaseExample = () => {
   return (
     <>
       <Task
-        task={{ id: '1', title: 'CSS', isDone: true }}
+        task={{
+          id: '1',
+          title: 'CSS',
+          status: TaskStatuses.Completed,
+          description: '',
+          completed: false,
+          priority: TaskPrioties.Low,
+          startDate: '',
+          deadline: '',
+          todoListId: v1(),
+          order: 0,
+          addedDate: '',
+        }}
         id={'5'}
         addTaskAC={addTaskCallback}
         changeTaskStatusAC={changeTaskStatusCallback}
@@ -29,7 +43,19 @@ export const TaskBaseExample = () => {
         removeTaskAC={removeTaskCallback}
       />
       <Task
-        task={{ id: '2', title: 'JS', isDone: false }}
+        task={{
+          id: '1',
+          title: 'CSS',
+          status: TaskStatuses.InProgress,
+          description: '',
+          completed: false,
+          priority: TaskPrioties.Low,
+          startDate: '',
+          deadline: '',
+          todoListId: v1(),
+          order: 0,
+          addedDate: '',
+        }}
         id={'6'}
         addTaskAC={addTaskCallback}
         changeTaskStatusAC={changeTaskStatusCallback}

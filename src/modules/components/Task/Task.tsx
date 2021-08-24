@@ -6,13 +6,13 @@ import React, { ChangeEvent, useCallback } from 'react';
 import './Task.scss';
 import { useDispatch } from 'react-redux';
 import EditTableSpan from '../EditTableSpan/EditTableSpan';
-import { TasksType } from '../Todolist/Todolist';
+import { TaskStatuses, TaskType } from '../../../api/todolists-api';
 
 type TaskProps = {
   id: string;
-  task: TasksType;
+  task: TaskType;
   addTaskAC: (newTodolistTitle: string, id: string) => void;
-  changeTaskStatusAC: (taskId: string, IsDone: boolean, todolistId: string) => void;
+  changeTaskStatusAC: (taskId: string, status: boolean, todolistId: string) => void;
   changeTaskTitleAC: (taskId: string, title: string, todolistId: string) => void;
   removeTaskAC: (taskId: string, todolistId: string) => void;
 };
@@ -37,13 +37,13 @@ const Task = React.memo((props: TaskProps) => {
         icon={<FavoriteBorder />}
         checkedIcon={<Favorite />}
         name="checked"
-        checked={props.task.isDone}
+        checked={props.task.completed}
         onChange={e => changeStatusHandler(e)}
       />
 
       <EditTableSpan
         title={props.task.title}
-        nameClass={props.task.isDone ? 'todolist__done' : ''}
+        nameClass={props.task.status === TaskStatuses.Completed ? 'todolist__done' : ''}
         onChange={changeTitleHandler}
       />
       <IconButton aria-label="delete" onClick={e => onClickHandlerRemove()}>
