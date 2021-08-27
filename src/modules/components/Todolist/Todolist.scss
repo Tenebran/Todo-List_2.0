@@ -1,0 +1,19 @@
+.todolist {
+  &__done {
+    opacity: 0.5;
+  }
+
+  &__button__wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  &__list {
+    list-style-type: none;
+
+    &__wrapper {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+}

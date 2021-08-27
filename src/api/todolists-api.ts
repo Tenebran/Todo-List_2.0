@@ -1,21 +1,35 @@
 import axios from 'axios';
 
-const instance = axios.create({
-  baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+const settings = {
   withCredentials: true,
   headers: {
     'API-KEY': 'e2aa960b-33d4-4875-9d72-648602b61592',
   },
+};
+
+const instance = axios.create({
+  baseURL: 'https://social-network.samuraijs.com/api/1.1/',
+  ...settings,
 });
 
-export type TodolistType = {
+export type UpdateTaskType = {
+  title: string;
+  description: string;
+  completed: boolean;
+  status: number;
+  priority: number;
+  startDate: string;
+  deadline: string;
+};
+
+export type TodoListType = {
   id: string;
   title: string;
   addedDate: string;
   order: number;
 };
 
-export type ResponseType<D = {}> = {
+type ResponseType<D = {}> = {
   resultCode: number;
   messages: Array<string>;
   data: D;
@@ -27,7 +41,8 @@ export enum TaskStatuses {
   Completed = 2,
   Draft = 3,
 }
-export enum TaskPriorities {
+
+export enum TaskPrioties {
   Low = 0,
   Middle = 1,
   Hi = 2,
@@ -38,8 +53,9 @@ export enum TaskPriorities {
 export type TaskType = {
   description: string;
   title: string;
+  completed: boolean;
   status: TaskStatuses;
-  priority: TaskPriorities;
+  priority: TaskPrioties;
   startDate: string;
   deadline: string;
   id: string;
@@ -48,52 +64,41 @@ export type TaskType = {
   addedDate: string;
 };
 
-type UpdateTaskModelType = {
-  title: string;
-  description: string;
-  status: number;
-  priority: number;
-  startDate: string;
-  deadline: string;
-};
-
-type GetTasksResponse = {
+type GetTaskResponse = {
   error: string | null;
   totalCount: number;
-  items: TaskType[];
+  items: Array<TaskType>;
 };
 
 export const todolistsAPI = {
   getTodolists() {
-    const promise = instance.get<TodolistType[]>('todo-lists');
-    return promise;
+    return instance.get<Array<TodoListType>>('todo-lists');
   },
-  createTodolist(title: string) {
-    const promise = instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {
-      title: title,
-    });
-    return promise;
+
+  createTodolists(title: string) {
+    return instance.post<ResponseType<{ item: TodoListType }>>('todo-lists', { title });
   },
-  deleteTodolist(id: string) {
-    const promise = instance.delete<ResponseType>(`todo-lists/${id}`);
-    return promise;
+
+  deleteTodoList(todolisID: string) {
+    return instance.delete<ResponseType>(`todo-lists/${todolisID}`);
   },
-  updateTodolist(id: string, title: string) {
-    const promise = instance.put<ResponseType>(`todo-lists/${id}`, { title: title });
-    return promise;
+
+  updateTodolist(todolisID: string, title: string) {
+    return instance.put<ResponseType>(`todo-lists/${todolisID}`, { title });
   },
-  getTasks(todolistId: string) {
-    return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
+
+  getTasks(todolistID: string) {
+    return instance.get<GetTaskResponse>(`todo-lists/${todolistID}/tasks`);
   },
-  deleteTask(todolistId: string, taskId: string) {
-    return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);
+  deleteTasks(todolistID: string, taskId: string) {
+    return instance.delete<ResponseType>(`todo-lists/${todolistID}/tasks/${taskId}`);
   },
   createTask(todolistId: string, taskTitile: string) {
     return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {
       title: taskTitile,
     });
   },
-  updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+  updateTask(todolistId: string, taskId: string, model: UpdateTaskType) {
     return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
   },
 };
