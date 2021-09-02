@@ -11,21 +11,16 @@ import IconButton from '@material-ui/core/IconButton';
 import { Grid } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import {
-  AddTodolistAc,
   changeTodolistFilterAC,
   changeTodolistTitleAC,
-  RemoveTodolistAC,
   KeyType,
   TodolistDomainType,
-  setTodolistsAC,
   fetchTodolistsThunk,
+  removeTodolistTC,
+  addTodolistTC,
+  changeTodolistTitleTC,
 } from './modules/state/todolists-reducer';
-import {
-  addTaskAC,
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskAC,
-} from './modules/state/task-reducer';
+import { addTaskAC, updateTaskTC } from './modules/state/task-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootState } from './modules/state/store/store';
 import { TaskType, todolistsAPI, TodoListType } from './api/todolists-api';
@@ -44,8 +39,7 @@ const App = React.memo(() => {
 
   const addItem = useCallback(
     (title: string) => {
-      const action = AddTodolistAc(title);
-      dispatch(action);
+      dispatch(addTodolistTC(title));
     },
     [dispatch]
   );
@@ -60,16 +54,14 @@ const App = React.memo(() => {
 
   const removeTodolist = useCallback(
     (todolistId: string) => {
-      const action = RemoveTodolistAC(todolistId);
-      dispatch(action);
+      dispatch(removeTodolistTC(todolistId));
     },
     [dispatch]
   );
 
   const changeTodolistTitle = useCallback(
     (id: string, title: string) => {
-      const action = changeTodolistTitleAC(id, title);
-      dispatch(action);
+      dispatch(changeTodolistTitleTC(id, title));
     },
     [dispatch]
   );
@@ -107,7 +99,7 @@ const App = React.memo(() => {
                     removeTodolist={removeTodolist}
                     changeTodolistTitle={changeTodolistTitle}
                     addTaskAC={addTaskAC}
-                    changeTaskTitleAC={changeTaskTitleAC}
+                    updateTaskTC={updateTaskTC}
                   />
                 </Paper>
               </Grid>

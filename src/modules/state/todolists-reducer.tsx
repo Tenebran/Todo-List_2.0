@@ -40,10 +40,8 @@ export const todolistReducer = (
       return state.filter(list => list.id !== action.id);
 
     case ADD_TODOLIST: {
-      return [
-        { title: action.title, id: action.todolistId, filter: 'all', addedDate: '', order: 0 },
-        ...state,
-      ];
+      const newTodolist: TodolistDomainType = { ...action.todolist, filter: 'all' };
+      return [newTodolist, ...state];
     }
 
     case CHANGE_TODOLIST_TITLE: {
@@ -69,11 +67,10 @@ export const RemoveTodolistAC = (todolistId: string) => {
   return { type: REMOVE_TODOLIST, id: todolistId } as const;
 };
 
-export const AddTodolistAc = (newTodolistTitle: string) => {
+export const AddTodolistAc = (todolist: TodoListType) => {
   return {
     type: ADD_TODOLIST,
-    title: newTodolistTitle,
-    todolistId: v1(),
+    todolist,
   } as const;
 };
 
@@ -101,5 +98,23 @@ export const fetchTodolistsThunk = (dispatch: Dispatch, getState: () => AppRootS
   todolistsAPI.getTodolists().then(res => {
     let action = setTodolistsAC(res.data);
     dispatch(action);
+  });
+};
+
+export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+  todolistsAPI.deleteTodoList(todolistId).then(res => {
+    dispatch(RemoveTodolistAC(todolistId));
+  });
+};
+
+export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
+  todolistsAPI.createTodolists(title).then(resp => {
+    dispatch(AddTodolistAc(resp.data.data.item));
+  });
+};
+
+export const changeTodolistTitleTC = (todolisID: string, title: string) => (dispatch: Dispatch) => {
+  todolistsAPI.updateTodolist(todolisID, title).then(resp => {
+    dispatch(changeTodolistTitleAC(title, todolisID));
   });
 };

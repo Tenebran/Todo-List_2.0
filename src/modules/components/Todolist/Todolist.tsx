@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootState } from '../../state/store/store';
 import { KeyType } from '../../state/todolists-reducer';
 import { TaskStatuses, TaskType } from '../../../api/todolists-api';
-import { addTaskTC, fetchTasksTC } from '../../state/task-reducer';
+import { addTaskTC, fetchTasksTC, UpdateDomainTaskModelType } from '../../state/task-reducer';
 // export type TasksType = {
 //   id: string;
 //   title: string;
@@ -25,7 +25,7 @@ type PropsType = {
   removeTodolist: (id: string) => void;
   changeTodolistTitle: (id: string, title: string) => void;
   addTaskAC: (task: TaskType) => void;
-  changeTaskTitleAC: (taskId: string, title: string, todolistId: string) => void;
+  updateTaskTC: (todoId: string, taskId: string, domainModel: UpdateDomainTaskModelType) => void;
 };
 
 const Todolist = React.memo((props: PropsType) => {
@@ -86,7 +86,7 @@ const Todolist = React.memo((props: PropsType) => {
             task={list}
             id={props.id}
             addTaskAC={props.addTaskAC}
-            changeTaskTitleAC={props.changeTaskTitleAC}
+            updateTaskTC={props.updateTaskTC}
           />
         ))}
       </ul>
