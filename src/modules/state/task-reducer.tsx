@@ -1,6 +1,5 @@
 import React from 'react';
-import { v1 } from 'uuid';
-import { TaskStatuses, TaskType, todolistsAPI, UpdateTaskType } from '../../api/todolists-api';
+import { TaskType, todolistsAPI, UpdateTaskType } from '../../api/todolists-api';
 import { TasksStateType } from '../../App';
 import {
   AddTodolistAc,
@@ -11,6 +10,9 @@ import {
 } from './todolists-reducer';
 import { Dispatch } from 'redux';
 import { AppRootState } from './store/store';
+import { appSetErrorAC, appSetStatusAC } from './appReducer';
+import { AxiosError } from 'axios';
+import { handleServerAppError, handleServerNetworkError } from '../utils/error-utils';
 
 const REMOVE_TASK = 'REMOVE-TASK';
 const ADD_TASK = 'ADD-TASKS';
@@ -106,41 +108,43 @@ export const changeTaskAC = (
   } as const;
 };
 
-// export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string) => {
-//   return {
-//     type: CHANGE_TASK_TITLE,
-//     taskId,
-//     todolistId,
-//     title,
-//   } as const;
-// };
-
 export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => {
   return { type: 'SET-TASKS', tasks, todolistId } as const;
 };
 
-export const fetchTasksTC = (todolistId: string) => {
-  return (dispatch: Dispatch) => {
-    todolistsAPI.getTasks(todolistId).then(res => {
-      const tasks = res.data.items;
-      const action = setTasksAC(tasks, todolistId);
-      dispatch(action);
-    });
-  };
+export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
+  dispatch(appSetStatusAC('loading'));
+  todolistsAPI.getTasks(todolistId).then(res => {
+    dispatch(setTasksAC(res.data.items, todolistId));
+    dispatch(appSetStatusAC('succeeded'));
+  });
 };
 
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch) => {
+  dispatch(appSetStatusAC('loading'));
   todolistsAPI.deleteTasks(todolistId, taskId).then(res => {
     const action = removeTaskAC(taskId, todolistId);
-    dispatch(action);
+    dispatch(removeTaskAC(taskId, todolistId));
+    dispatch(appSetStatusAC('succeeded'));
   });
 };
 
 export const addTaskTC = (todoID: string, taskTitle: string) => (dispatch: Dispatch) => {
-  todolistsAPI.createTask(todoID, taskTitle).then(res => {
-    let task = res.data.data.item;
-    dispatch(addTaskAC(task));
-  });
+  dispatch(appSetStatusAC('loading'));
+  todolistsAPI
+    .createTask(todoID, taskTitle)
+    .then(res => {
+      if (res.data.resultCode === 0) {
+        let task = res.data.data.item;
+        dispatch(addTaskAC(task));
+        dispatch(appSetStatusAC('succeeded'));
+      } else {
+        handleServerAppError(dispatch, res.data);
+      }
+    })
+    .catch((err: AxiosError) => {
+      handleServerNetworkError(dispatch, err.message);
+    });
 };
 
 export type UpdateDomainTaskModelType = {
@@ -158,6 +162,7 @@ export const updateTaskTC = (
   taskId: string,
   domainModel: UpdateDomainTaskModelType
 ) => (dispatch: Dispatch, getState: () => AppRootState) => {
+  dispatch(appSetStatusAC('loading'));
   const appState = getState();
   const allTasks = appState.task;
   const tasksForClickedTodo = allTasks[todoId];
@@ -180,6 +185,7 @@ export const updateTaskTC = (
 
     todolistsAPI.updateTask(todoId, taskId, model).then(res => {
       dispatch(changeTaskAC(taskId, todoId, domainModel));
+      dispatch(appSetStatusAC('succeeded'));
     });
   }
 };

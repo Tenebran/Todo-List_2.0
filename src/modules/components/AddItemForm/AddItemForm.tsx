@@ -3,9 +3,11 @@ import './AddItemForm.scss';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
+import { RequestStatusType } from '../../state/appReducer';
 
 type addItemFormPropsType = {
   addItem: (newValue: string) => void;
+  entityStatus?: RequestStatusType;
 };
 
 const AddItemForm = React.memo((props: addItemFormPropsType) => {
@@ -50,8 +52,14 @@ const AddItemForm = React.memo((props: addItemFormPropsType) => {
         value={newTaskTitle}
         onChange={onChangeHandler}
         onKeyPress={onKeyPressHandler}
+        disabled={props.entityStatus === 'loading'}
       />
-      <IconButton color="primary" onClick={addTask} size="small">
+      <IconButton
+        color="primary"
+        onClick={addTask}
+        size="small"
+        disabled={props.entityStatus === 'loading'}
+      >
         <NoteAddIcon fontSize="large" />
       </IconButton>
     </div>

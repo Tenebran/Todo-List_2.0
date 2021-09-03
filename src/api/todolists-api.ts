@@ -29,7 +29,7 @@ export type TodoListType = {
   order: number;
 };
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
   resultCode: number;
   messages: Array<string>;
   data: D;

@@ -3,16 +3,13 @@ import Todolist from './modules/components/Todolist/Todolist';
 import './App.scss';
 import AddItemForm from './modules/components/AddItemForm/AddItemForm';
 import AppBar from '@material-ui/core/AppBar';
-import { Container, Toolbar } from '@material-ui/core';
-import { Typography } from '@material-ui/core';
-import { Button } from '@material-ui/core';
+import { Container, Toolbar, Typography, Button } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
 import { Grid } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import {
   changeTodolistFilterAC,
-  changeTodolistTitleAC,
   KeyType,
   TodolistDomainType,
   fetchTodolistsThunk,
@@ -23,7 +20,10 @@ import {
 import { addTaskAC, updateTaskTC } from './modules/state/task-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootState } from './modules/state/store/store';
-import { TaskType, todolistsAPI, TodoListType } from './api/todolists-api';
+import { TaskType } from './api/todolists-api';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { RequestStatusType } from './modules/state/appReducer';
+import { ErrorSnackbar } from './modules/components/ErrorSnackbar/ErrorSnackbar';
 
 export type TasksStateType = {
   [key: string]: Array<TaskType>;
@@ -36,6 +36,8 @@ const App = React.memo(() => {
 
   const dispatch = useDispatch();
   const todolist = useSelector<AppRootState, Array<TodolistDomainType>>(state => state.todolist);
+  const status = useSelector<AppRootState, RequestStatusType>(state => state.app.status);
+  console.log(status);
 
   const addItem = useCallback(
     (title: string) => {
@@ -80,7 +82,9 @@ const App = React.memo(() => {
             Login
           </Button>
         </Toolbar>
+        {status === 'loading' ? <LinearProgress color="secondary" /> : ''}
       </AppBar>
+
       <Container fixed className="todoList__form">
         <Grid container justify="center">
           <AddItemForm addItem={addItem} />
@@ -100,6 +104,7 @@ const App = React.memo(() => {
                     changeTodolistTitle={changeTodolistTitle}
                     addTaskAC={addTaskAC}
                     updateTaskTC={updateTaskTC}
+                    entityStatus={list.entityStatus}
                   />
                 </Paper>
               </Grid>
@@ -107,6 +112,8 @@ const App = React.memo(() => {
           })}
         </Grid>
       </Container>
+
+      <ErrorSnackbar />
     </div>
   );
 });
